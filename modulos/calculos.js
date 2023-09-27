@@ -8,16 +8,20 @@ function validarNotas(notas) {
 }
 
 function mostrarRelatorio(aluno, professor, sexoAluno, sexoProfessor, curso, disciplina, notas, status, notaExame, media, mediaFinal) {
+    let pronomeAluno = sexoAluno === 'F' ? 'a aluna' : 'o aluno';
+    let pronomeProfessor = sexoProfessor === 'F' ? 'a professora' : 'o professor';
+
     console.log(`
     Relatório do aluno:
-    O ${sexoAluno === 'F' ? 'aluna' : 'aluno'} ${aluno} foi ${status} na disciplina ${disciplina}.
+    ${pronomeAluno} ${aluno} foi ${status} na disciplina ${disciplina}.
     Curso: ${curso}
-    Professor${sexoProfessor === 'F' ? 'a' : ''}: ${professor}
-    Notas do aluno: ${notas.join(', ')}
+    ${pronomeProfessor}: ${professor}
+    Notas do ${pronomeAluno}: ${notas.join(', ')}
   `);
 
     if (status === 'aprovado' || status === 'reprovado') {
         console.log(`Status: ${status.toUpperCase()}`);
+        console.log(`Média das Notas: ${media}`);
     } else {
         console.log(`Status: ${status.toUpperCase()}`);
         console.log(`Nota do Exame: ${notaExame}`);
