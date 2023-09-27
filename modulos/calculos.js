@@ -1,10 +1,10 @@
 function calcularMedia(notas) {
-    const soma = notas.reduce((acc, nota) => acc + nota, 0)
-    return soma / notas.length
+    const soma = notas.reduce((acc, nota) => acc + nota, 0);
+    return soma / notas.length;
 }
 
 function validarNotas(notas) {
-    return notas.every((nota) => !isNaN(nota) && nota >= 0 && nota <= 100)
+    return notas.every((nota) => !isNaN(nota) && nota >= 0 && nota <= 100);
 }
 
 function mostrarRelatorio(aluno, professor, sexoAluno, sexoProfessor, curso, disciplina, notas, status, notaExame, media, mediaFinal) {
@@ -14,62 +14,68 @@ function mostrarRelatorio(aluno, professor, sexoAluno, sexoProfessor, curso, dis
     Curso: ${curso}
     Professor${sexoProfessor === 'F' ? 'a' : ''}: ${professor}
     Notas do aluno: ${notas.join(', ')}
-    Nota do Exame: ${notaExame}
-    Média Final: ${media}
-    Média final do Exame: ${mediaFinal}
-  `)
+  `);
+
+    if (status === 'aprovado' || status === 'reprovado') {
+        console.log(`Status: ${status.toUpperCase()}`);
+    } else {
+        console.log(`Status: ${status.toUpperCase()}`);
+        console.log(`Nota do Exame: ${notaExame}`);
+        console.log(`Média Final: ${media}`);
+        console.log(`Média final do Exame: ${mediaFinal}`);
+    }
 }
 
 function obterRelatorio(rl) {
     rl.question('Nome do aluno: ', (aluno) => {
         rl.question('Nome do professor: ', (professor) => {
             rl.question('Sexo do professor (M/F): ', (sexoProfessor) => {
-            rl.question('Sexo do aluno (M/F): ', (sexoAluno) => {
-            rl.question('Nome do curso: ', (curso) => {
-            rl.question('Nome da disciplina: ', (disciplina) => {
-            rl.question('Digite as 4 notas separadas por uma vírgula ', (notasInput) => {
-           const notas = notasInput.split(',').map((nota) => parseFloat(nota))
+                rl.question('Sexo do aluno (M/F): ', (sexoAluno) => {
+                    rl.question('Nome do curso: ', (curso) => {
+                        rl.question('Nome da disciplina: ', (disciplina) => {
+                            rl.question('Digite as 4 notas separadas por uma vírgula: ', (notasInput) => {
+                                const notas = notasInput.split(',').map((nota) => parseFloat(nota));
 
-           if (!validarNotas(notas)) {
-          console.log('Erro: as notas podem ser apenas de 0 a 100).')
-          rl.close()
-          return
-          }
+                                if (!validarNotas(notas)) {
+                                    console.log('Erro: as notas podem ser apenas de 0 a 100.');
+                                    rl.close();
+                                    return;
+                                }
 
-          const media = calcularMedia(notas)
-          let status = ''
+                                const media = calcularMedia(notas);
+                                let status = '';
 
-        if (media >= 70) {
-        status = 'aprovado'
-         } else if (media < 50) {
-         tatus = 'reprovado'
-       } else {
-         status = 'em exame'
+                                if (media >= 70) {
+                                    status = 'aprovado';
+                                } else if (media < 50) {
+                                    status = 'reprovado';
+                                } else {
+                                    status = 'em exame';
 
-     rl.question('Digite a nota do exame: ', (notaExame) => {
-      const mediaFinal = (parseFloat(notaExame) + media) / 2
-    if (mediaFinal >= 60) {
-     status = 'aprovado em exame'
-    } else {
-     status = 'reprovado no exame'
-    }
+                                    rl.question('Digite a nota do exame: ', (notaExame) => {
+                                        const mediaFinal = (parseFloat(notaExame) + media) / 2;
+                                        if (mediaFinal >= 60) {
+                                            status = 'aprovado no exame';
+                                        } else {
+                                            status = 'reprovado no exame';
+                                        }
 
-   mostrarRelatorio(aluno, professor, sexoAluno, sexoProfessor, curso, disciplina, notas, status, notaExame, media, mediaFinal)
-    rl.close()
-   })
+                                        mostrarRelatorio(aluno, professor, sexoAluno, sexoProfessor, curso, disciplina, notas, status, notaExame, media, mediaFinal);
+                                        rl.close();
+                                    });
 
-     return
-    }
+                                    return mostrarRelatorio;
+                                }
 
-  mostrarRelatorio(aluno, professor, sexoAluno, sexoProfessor, curso, disciplina, notas, status, '', media, '')
-    rl.close()
-           })
-       })
-       })
-       })
-   })
-        })
-    })
+                                mostrarRelatorio(aluno, professor, sexoAluno, sexoProfessor, curso, disciplina, notas, status, '', media, '');
+                                rl.close();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
 }
 
 module.exports = {
@@ -77,4 +83,4 @@ module.exports = {
     validarNotas,
     mostrarRelatorio,
     obterRelatorio,
-}
+};
